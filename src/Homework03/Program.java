@@ -3,13 +3,16 @@ package Homework03;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
 public class Program {
     public static void main(String[] args) {
         boolean isData;
         String[] data;
-        System.out.println("Введите данные:");
+        System.out.println("Введите данные через пробел в одну строчку:");
         System.out.println("Фамилия");
         System.out.println("Имя");
         System.out.println("Отчество");
@@ -51,16 +54,22 @@ public class Program {
                 continue;
             }
 
-//            String birthday = data[1];
-//            boolean isBirthday = birthdayEx(birthday);
-//            if (!isBirthday) {
-//                System.out.println("Ошибка! Неверный формат даты. Попробуйте ещё раз.");
-//                isData = false;
-//                continue;
-//            }
+            String birthday = data[3];
+            boolean isBirthday = birthdayEx(birthday);
+            if (!isBirthday) {
+                System.out.println("Ошибка! Неверный формат даты. Попробуйте ещё раз.");
+                isData = false;
+                continue;
+            }
 
+            long phoneNumber;
+            if (data[4].length() < 5 || data[4].length() > 11) {
+                System.out.println("Ошибка! Неверное количество цифр в номере телефона. Попробуйте ещё раз.");
+                isData = false;
+                continue;
+            }
             try {
-                long phoneNumber = Long.parseLong(data[4]);
+                phoneNumber = Long.parseLong(data[4]);
             } catch (NumberFormatException e) {
                 System.out.println("Ошибка! Неверный формат номера телефона. Попробуйте ещё раз.");
                 isData = false;
@@ -92,19 +101,15 @@ public class Program {
     }
 
     private static boolean birthdayEx(String str) {
-        String[] arr = str.split(".");
-        if (arr.length != 3) return false;
+        String dateFormat = "dd.mm.yyyy";
         try {
-            for (String el : arr) {
-                Integer.parseInt(el);
-            }
-
-        } catch (NumberFormatException e) {
+            DateFormat df = new SimpleDateFormat(dateFormat);
+            df.setLenient(false);
+            df.parse(str);
+            return true;
+        } catch (ParseException e) {
             return false;
         }
-        if (arr[0].length() != 2 || arr[1].length() != 2 || arr[2].length() != 4
-                || Integer.parseInt(arr[0]) > 31 || Integer.parseInt(arr[1]) > 31 || Integer.parseInt(arr[2]) > 2020) return false;
-        return true;
     }
 
     private static void createFile(String[] arr) {
