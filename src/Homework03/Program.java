@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 public class Program {
@@ -100,15 +101,19 @@ public class Program {
         else return "1";
     }
 
-    private static boolean birthdayEx(String str) {
-        String dateFormat = "dd.mm.yyyy";
-        try {
-            DateFormat df = new SimpleDateFormat(dateFormat);
-            df.setLenient(false);
-            df.parse(str);
-            return true;
-        } catch (ParseException e) {
+    private static boolean birthdayEx(String strDate) {
+        if (strDate.length() != 10) {
             return false;
+        }
+        else {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+            dateFormat.setLenient(false);
+            try {
+                dateFormat.parse(strDate);
+            } catch (ParseException e) {
+                return false;
+            }
+            return true;
         }
     }
 
@@ -116,7 +121,7 @@ public class Program {
         String fileName = arr[0] + ".txt";
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))) {
-            String output = arr[0] + arr[1] + arr[2] + arr[3] + " " + arr[4] + arr[5];
+            String output = "<" + arr[0] + "><" + arr[1] + "><" + arr[2] + "><" + arr[3] + "> <" + arr[4] + "><" + arr[5] + ">";
             writer.write(output);
             writer.newLine();
             System.out.println("Данные успешно записаны в файл " + fileName);
